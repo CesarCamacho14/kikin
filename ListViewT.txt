@@ -1,0 +1,187 @@
+ListViewT
+//ListView
+
+//activitymain.xml
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:orientation="vertical">
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/vistitas">
+    </ListView>
+
+</LinearLayout>
+
+//basurita.xml
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:id="@+id/imageicon"></ImageView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textito1"
+            android:textSize="20dp"
+            android:gravity="center"></TextView>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textito2"
+            android:textSize="20dp"
+            android:gravity="center"></TextView>
+
+    </LinearLayout>
+</LinearLayout>
+
+//adaptador.java
+package com.example.listita; // o listito, dependiendo de cómo llamaste al proyecto
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+public class adaptador extends BaseAdapter {
+    Context contexto;
+    String[] arreglocomenta;
+    String[] arreglolista;
+    int[] arregloimagenes;
+    LayoutInflater inflater;
+
+    //constructor
+    public adaptador(Context contexto, String[] arreglocomenta, String[] arreglolista, int[] arregloimagenes) {
+        this.contexto = contexto;
+        this.arreglocomenta = arreglocomenta;
+        this.arreglolista = arreglolista;
+        this.arregloimagenes = arregloimagenes;
+        this.inflater = LayoutInflater.from(contexto); //se le movio esto
+    }
+
+    @Override
+    public int getCount() {
+        return arreglocomenta.length; //se le movio esto
+    }
+
+    @Override
+    public Object getItem(int position) {
+        return null;
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return 0;
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        convertView = inflater.inflate(R.layout.basurita, null); // esta linea
+
+        TextView texto1 = convertView.findViewById(R.id.textito1);
+        TextView texto2 = convertView.findViewById(R.id.textito2);
+        ImageView imagencita = convertView.findViewById(R.id.imageicon);
+
+        texto1.setText(arreglolista[position]);
+        texto2.setText(arreglocomenta[position]);
+        imagencita.setImageResource(arregloimagenes[position]);
+
+        return convertView;
+    }
+}
+
+//MainActivity.java
+
+package com.example.listita; // o listito
+
+import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
+public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
+
+    ListView vista;
+
+    // Reconstruido desde la imagen de los resultados
+    String[] arreglocomenta = {"uno", "dos", "tres", "cuatro", "cinco", "seis", "siete", "ocho", "nueve"};
+    String[] arreglolista = {"Amlo america", "gignac chido", "papa tigres", "me siento bien chingon", "puro tigres", "capitan tigre", "homero tigre", "buenos dias tigres", "ya por fin ganamos que padre"};
+    
+    // Nombres de las imágenes reconstruidos (deben coincidir con tus archivos en res/drawable)
+    int[] arregloimagenes = {R.drawable.amlo, R.drawable.gignac, R.drawable.tigres1, R.drawable.tigres2, R.drawable.tigres3, R.drawable.tigres4, R.drawable.tigres5, R.drawable.tigres6, R.drawable.tigres7};
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // EdgeToEdge.enable(this); // (Si usas EdgeToEdge)
+        setContentView(R.layout.activity_main);
+        
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
+
+        vista = findViewById(R.id.vistitas);
+        vista.setOnItemClickListener(this);
+
+        adaptador adaptadorcito = new adaptador(getApplicationContext(), arreglocomenta, arreglolista, arregloimagenes);
+        vista.setAdapter(adaptadorcito);
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        // Aquí va la lógica al dar clic a un elemento
+    }
+}
+
+//enOnItemClick
+@Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        
+        // ==========================================
+        // OPCIÓN 1: Mostrar un mensaje emergente (Toast)
+        // ==========================================
+        // Usamos arreglolista[position] para obtener el texto exacto que el usuario presionó
+        Toast.makeText(MainActivity.this, "Le picaste a: " + arreglolista[position], Toast.LENGTH_SHORT).show();
+
+
+        // ==========================================
+        // OPCIÓN 2: Ir a otra actividad
+        // ==========================================
+        /* Para usar esta opción, borra o comenta el Toast de arriba y quita los comentarios de abajo (/* y */)
+        
+        Intent intent = new Intent(MainActivity.this, SegundaActividad.class);
+        
+        // Opcional: Si quieres mandarle a la otra pantalla el nombre de la opción seleccionada
+        intent.putExtra("NOMBRE_OPCION", arreglolista[position]);
+        
+        startActivity(intent);
+        */
+    }

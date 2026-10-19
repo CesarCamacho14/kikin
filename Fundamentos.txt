@@ -1,0 +1,14 @@
+Fundamentos
+
+//Cambiar entre actividades
+android:onClick="cambiarPantalla"
+public void cambiarPantalla(View view) {
+        Intent intent = new Intent(this, SegundaActividad.class);
+        startActivity(intent);
+    }
+
+//declarar
+    ListView vista;
+    String[] arreglocomenta = {"uno", "dos", "tres", "cuatro", "cinco", "seis", "siete", "ocho", "nueve"};
+    String[] arreglolista = {"Amlo america", "gignac chido", "papa tigres", "me siento bien chingon", "puro tigres", "capitan tigre", "homero tigre", "buenos dias tigres", "ya por fin ganamos que padre"};
+    int[] arregloimagenes = {R.drawable.amlo, R.drawable.gignac, R.drawable.tigres1, R.drawable.tigres2, R.drawable.tigres3, R.drawable.tigres4, R.drawable.tigres5, R.drawable.tigres6, R.drawable.tigres7};

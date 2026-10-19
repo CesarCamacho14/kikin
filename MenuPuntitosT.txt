@@ -1,0 +1,72 @@
+MenuPuntitosT
+//MenuPuntitos
+
+
+//res,values,themes,themes.xml, quitar dsp de DayNight (.NoActionBar)
+//res, click derecho, nuevo android resource file, resource type:menu
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/hola"
+        android:title="hola"
+        android:icon="@drawable/hola"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/hola2"
+        android:title="hola2"
+        app:showAsAction="ifRoom"/>
+</menu>
+
+
+//En MainActivity.java, genereamos codigo, override methods, presionar collapse all,expandir app.Activity,
+//seleccionar OnCreateOptionsMenu(menu:Menu)Boolean, onOptionsItemSelected(item:MenuItem):boolean
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        String valor1 = datito1.getText().toString().trim();
+        String valor2 = datito2.getText().toString().trim();
+
+        if (valor1.isEmpty() || valor2.isEmpty()) {
+            Toast.makeText(this, "Por favor ingresa ambos números", Toast.LENGTH_SHORT).show();
+            return super.onOptionsItemSelected(item);
+        }
+
+        clasesita opcion = new clasesita();
+
+        opcion.setDatito1(Integer.parseInt(valor1));
+        opcion.setDatito2(Integer.parseInt(valor2));
+
+        int resultado = 0;
+
+        if (id == R.id.sumita || id == R.id.Sumita) {
+            resultado = opcion.suma();
+            Toast.makeText(this, "Resultado: " + resultado, Toast.LENGTH_SHORT).show();
+            return true;
+        }
+        if (id == R.id.restita || id == R.id.Restita) {
+            resultado = opcion.resta();
+            Toast.makeText(this, "Resultado: " + resultado, Toast.LENGTH_SHORT).show();
+            return true;
+        }
+        if (id == R.id.multiplicadita || id == R.id.Multiplica) {
+            resultado = opcion.multiplicacion();
+            Toast.makeText(this, "Resultado: " + resultado, Toast.LENGTH_SHORT).show();
+            return true;
+
+        }
+        if (id == R.id.divisionsita || id == R.id.Divide) {
+            if (opcion.getDatito2() == 0) {
+                Toast.makeText(this, "No se puede dividir entre cero", Toast.LENGTH_SHORT).show();
+                return super.onOptionsItemSelected(item);
+            }
+            resultado = opcion.division();
+                Toast.makeText(this, "Resultado: " + resultado, Toast.LENGTH_SHORT).show();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+
+    }
+
