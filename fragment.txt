@@ -1,0 +1,100 @@
+
+//en activity main.xml
+<!-- res/layout/fragment_ejemplo.xml -->
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="#E8F5E9"> <!-- Un color de fondo verde claro para distinguirlo -->
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="¡Hola! Soy un Fragmento"
+        android:textSize="24sp"
+        android:textStyle="bold"/>
+
+</LinearLayout>
+
+
+// en nueva clase EjemploFragment.java
+package com.tu_paquete; // Reemplaza con el nombre de tu paquete
+
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
+public class EjemploFragment extends Fragment {
+
+    // Necesitamos un constructor público vacío por defecto
+    public EjemploFragment() {
+    }
+
+    // Este método es el encargado de "inflar" (dibujar) el XML del fragmento
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        // Inflamos el diseño fragment_ejemplo.xml
+        return inflater.inflate(R.layout.fragment_ejemplo, container, false);
+    }
+}
+
+//en activity main.xml
+<!-- res/layout/activity_main.xml -->
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Esta es la Actividad Principal"
+        android:padding="16dp"
+        android:textSize="20sp"
+        android:gravity="center"/>
+
+    <!-- Este es el hueco donde meteremos nuestro Fragmento -->
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/contenedor_fragmento"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</LinearLayout>
+
+//en activity main.java
+package com.tu_paquete; // Reemplaza con el nombre de tu paquete
+
+import android.os.Bundle;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        // Verificamos que savedInstanceState sea null para no cargar el fragmento 
+        // múltiples veces si se rota la pantalla del celular.
+        if (savedInstanceState == null) {
+            
+            // 1. Creamos una instancia de nuestro Fragmento
+            EjemploFragment miFragmento = new EjemploFragment();
+
+            // 2. Iniciamos la transacción para agregar el fragmento a la pantalla
+            getSupportFragmentManager().beginTransaction()
+                    .setReorderingAllowed(true)
+                    // Reemplazamos el contenedor vacío con nuestro fragmento
+                    .replace(R.id.contenedor_fragmento, miFragmento) 
+                    .commit(); // Confirmamos los cambios
+        }
+    }
+}
